@@ -1,0 +1,94 @@
+<div class="container mt-4 mb-5">
+  <h2>Traduction i18n</h2>
+
+  <!-- Upload de fichier JSON -->
+  <div class="mt-3 ">
+    <input type="file" (change)="onFileUpload($event)" accept=".json" class="form-control">
+  </div>
+
+  <!-- Sélecteur de langue -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <label>Langue source</label>
+      <select [(ngModel)]="sourceLang" class="form-control">
+        <option value="fr">Français</option>
+        <option value="en">Anglais</option>
+        <option value="es">Espagnol</option>
+        <option value="de">Allemand</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label>Langue cible</label>
+      <select [(ngModel)]="targetLang" class="form-control">
+        <option value="en">Anglais</option>
+        <option value="fr">Français</option>
+        <option value="es">Espagnol</option>
+        <option value="de">Allemand</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb-4 align-items-center">
+  <div class="col-md-6 d-flex justify-content-start">
+    <!-- Bouton de traduction -->
+    <button (click)="translate()" class="btn btn-primary" [disabled]="!jsonData">
+      Traduire via API
+    </button>
+  </div>
+  <div class="col-md-6 d-flex justify-content-end">
+    <!-- Bouton d'export -->
+    <button (click)="exportJSON()" class="btn btn-success" [disabled]="!translatedData || getKey().length === 0">
+      Exporter le JSON
+    </button>
+  </div>
+</div>
+
+ <div style="overflow-x: auto;">
+  <div class="container mt-4" *ngIf="jsonData">
+    
+    <!-- En-tête -->
+    <div class="row bg-primary text-white fw-bold py-2 px-2 rounded mb-3 shadow-sm">
+      <div class="col-12 col-md-2 text-nowrap">Clé</div>
+      <div class="col-12 col-md-5 text-nowrap">Texte original ({{ sourceLang }})</div>
+      <div class="col-12 col-md-5 text-nowrap">Traduction ({{ targetLang }})</div>
+    </div>
+
+    <!-- Lignes de contenu -->
+    <div 
+      class="card mb-3 shadow-sm border-0"
+      *ngFor="let key of getKey()"
+      style="transition: transform 0.2s;"
+      (mouseover)="hover = true" (mouseout)="hover = false"
+    >
+      <div class="card-body row align-items-start">
+        
+        <!-- Clé -->
+        <div class="col-12 col-md-2 text-truncate mb-2 mb-md-0">
+          <strong class="text-secondary">{{ key }}</strong>
+        </div>
+        
+        <!-- Texte original -->
+        <div class="col-12 col-md-5 text-break mb-2 mb-md-0">
+          <span class="text-dark">{{ getValue(jsonData, key) }}</span>
+        </div>
+        
+        <!-- Traduction modifiable -->
+        <div class="col-12 col-md-5">
+          <input 
+            [(ngModel)]="translatedData[key]" 
+            class="form-control border border-success" 
+            style="background-color: #f8f9fa;"
+            placeholder="Entrez la traduction..."
+          >
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+</div>
